@@ -10,15 +10,18 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Random;
 
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Setter
+@Getter
 @EqualsAndHashCode
 @ToString
 
-@Entity
+@Entity(name = "product")
 @Table(name = "product")
 
 public class Product implements Serializable {
@@ -27,24 +30,35 @@ public class Product implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull(message = "Name may not be null")
     @Column(name = "product_name")
     @NotEmpty
     @Length(max = 100)
     private String name;
 
-    @Column(name = "price")
-    @NotNull(message = "Please insert the price")
-    @Digits(integer = 5, fraction = 2)
-    private double price;
+    @NotNull(message = "Price may not be null")
+    @NotEmpty
+    @Column(name = "purchasePrice")
+    private double purchasePrice;
+
+    @NotNull(message = "Price may not be null")
+    @NotEmpty
+    @Column(name = "sellingPrice")
+    private double sellingPrice;
 
     @Column(name = "quantity")
-    @NotNull
-    @Digits(integer = 5, fraction = 0)
+    @NotEmpty
     private int quantity;
 
+    //@Temporal(TemporalType.DATE)
+    @Column(name = "expiry_date")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate expiryDate;
+
+   // @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate todayDate= LocalDate.now();
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
@@ -55,3 +69,4 @@ public class Product implements Serializable {
     private Brand brandName;
 
 }
+
